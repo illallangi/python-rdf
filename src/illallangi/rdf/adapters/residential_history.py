@@ -14,7 +14,7 @@ class ResidentialHistoryAdapter(diffsync.Adapter):
         github_repo_name: str,
         github_repo_owner: str,
         github_token: str,
-        root: str,
+        rdf_root: str,
         *args: list,
         **kwargs: dict,
     ) -> None:
@@ -23,7 +23,7 @@ class ResidentialHistoryAdapter(diffsync.Adapter):
         self.github_repo_name = github_repo_name
         self.github_repo_owner = github_repo_owner
         self.github_token = github_token
-        self.root = root
+        self.rdf_root = rdf_root
 
     Residence = Residence
 
@@ -40,7 +40,7 @@ class ResidentialHistoryAdapter(diffsync.Adapter):
             github_repo_name=self.github_repo_name,
             github_repo_owner=self.github_repo_owner,
             github_token=self.github_token,
-            root=self.root,
+            rdf_root=self.rdf_root,
         )
 
     def load(
