@@ -3,28 +3,28 @@ from partial_date import PartialDate
 
 
 class Residence(diffsync.DiffSyncModel):
-    Label: str
+    label: str
 
-    Country: str
-    Finish: PartialDate | None
-    Locality: str
-    OLC: str
-    PostalCode: str
-    Region: str
-    Start: PartialDate | None
-    Street: str
+    country: str
+    finish: PartialDate | None
+    locality: str
+    olc: str
+    postal_code: str
+    region: str
+    start: PartialDate | None
+    street: str
 
     _modelname = "Residence"
-    _identifiers = ("Label",)
+    _identifiers = ("label",)
     _attributes = (
-        "Country",
-        "Finish",
-        "Locality",
-        "OLC",
-        "PostalCode",
-        "Region",
-        "Start",
-        "Street",
+        "country",
+        "finish",
+        "locality",
+        "olc",
+        "postal_code",
+        "region",
+        "start",
+        "street",
     )
 
     @classmethod

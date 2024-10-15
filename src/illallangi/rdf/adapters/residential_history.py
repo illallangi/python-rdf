@@ -52,8 +52,8 @@ class ResidentialHistoryAdapter(diffsync.Adapter):
         for obj in self.client.get_residences():
             self.add(
                 Residence(
-                    label=obj["Label"],
-                    start=obj["Start"],
-                    finish=obj["Finish"],
+                    label=obj["label"],
+                    start=obj["start"],
+                    finish=obj["finish"],
                 ),
             )

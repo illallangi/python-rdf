@@ -7,23 +7,23 @@ class CourseMixin:
         self,
     ) -> str:
         return f"""
-SELECT ?Start ?Finish ?Label ?Institution ?Street ?Locality ?Region ?PostalCode ?Country ?OLC WHERE {{
-    <{ self.rdf_root }> ip:attendedCourse ?attendedCourse .
-    OPTIONAL {{ ?attendedCourse ip:startTime ?Start }} .
-    OPTIONAL {{ ?attendedCourse ip:endTime ?Finish }} .
-    ?attendedCourse rdfs:label ?Label .
-    ?attendedCourse ip:atInstitution ?atInstitution .
+SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code ?country ?olc WHERE {{
+    <{ self.rdf_root }> ip:attendedCourse ?attended_course .
+    OPTIONAL {{ ?attended_course ip:startTime ?start }} .
+    OPTIONAL {{ ?attended_course ip:endTime ?finish }} .
+    ?attended_course rdfs:label ?label .
+    ?attended_course ip:atInstitution ?at_institution .
 
-    OPTIONAL {{ ?atInstitution rdfs:label ?Institution . }}
+    OPTIONAL {{ ?at_institution rdfs:label ?institution . }}
 
-    OPTIONAL {{ ?atInstitution v:Address ?address
-        OPTIONAL {{ ?address v:street-address ?Street }}
-        OPTIONAL {{ ?address v:locality ?Locality }}
-        OPTIONAL {{ ?address v:region ?Region }}
-        OPTIONAL {{ ?address v:postal-code ?PostalCode }}
-        OPTIONAL {{ ?address v:country-name ?Country }}
+    OPTIONAL {{ ?at_institution v:Address ?address
+        OPTIONAL {{ ?address v:street-address ?street }}
+        OPTIONAL {{ ?address v:locality ?locality }}
+        OPTIONAL {{ ?address v:region ?region }}
+        OPTIONAL {{ ?address v:postal-code ?postal_code }}
+        OPTIONAL {{ ?address v:country-name ?country }}
     }}
-    OPTIONAL {{ ?atInstitution ip:olc ?OLC }} .
+    OPTIONAL {{ ?at_institution ip:olc ?olc }} .
 }}
 """
 
@@ -46,14 +46,14 @@ SELECT ?Start ?Finish ?Label ?Institution ?Street ?Locality ?Region ?PostalCode 
                         str(k): b[str(k)].value if str(k) in b else None
                         for k in result.vars
                     },
-                    "Start": PartialDate(b["Start"].value)
-                    if "Start" in b and b["Start"].value not in ["Unknown"]
+                    "start": PartialDate(b["start"].value)
+                    if "start" in b and b["start"].value not in ["Unknown"]
                     else None,
-                    "Finish": PartialDate(b["Finish"].value)
-                    if "Finish" in b and b["Finish"].value not in ["Unknown"]
+                    "finish": PartialDate(b["finish"].value)
+                    if "finish" in b and b["finish"].value not in ["Unknown"]
                     else None,
                 }
                 for b in result.bindings
             ],
-            key=lambda x: str(x["Start"]),
+            key=lambda x: str(x["start"]),
         )

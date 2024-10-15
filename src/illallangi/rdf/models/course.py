@@ -3,30 +3,30 @@ from partial_date import PartialDate
 
 
 class Course(diffsync.DiffSyncModel):
-    Label: str
+    label: str
 
-    Country: str
-    Finish: PartialDate | None
-    Institution: str
-    Locality: str
-    OLC: str
-    PostalCode: str
-    Region: str
-    Start: PartialDate | None
-    Street: str
+    country: str
+    finish: PartialDate | None
+    institution: str
+    locality: str
+    olc: str
+    postal_code: str
+    region: str
+    start: PartialDate | None
+    street: str
 
     _modelname = "Course"
-    _identifiers = ("Label",)
+    _identifiers = ("label",)
     _attributes = (
-        "Country",
-        "Finish",
-        "Institution",
-        "Locality",
-        "OLC",
-        "PostalCode",
-        "Region",
-        "Start",
-        "Street",
+        "country",
+        "finish",
+        "institution",
+        "locality",
+        "olc",
+        "postal_code",
+        "region",
+        "start",
+        "street",
     )
 
     @classmethod
