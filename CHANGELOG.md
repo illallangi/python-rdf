@@ -1,3 +1,10 @@
+## v0.1.4 (2024-10-15)
+
+### Fix
+
+- **residentialhistoryadapter**: added required fields
+- **libraries**: added diffsync
+
 ## v0.1.3 (2024-10-15)
 
 ### Fix
