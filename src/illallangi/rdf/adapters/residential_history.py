@@ -49,9 +49,6 @@ class ResidentialHistoryAdapter(diffsync.Adapter):
         if self.count() > 0:
             return
 
-        if self.partner.count() == 0:
-            self.partner.load()
-
         for obj in self.client.get_residences():
             self.add(
                 Residence(
