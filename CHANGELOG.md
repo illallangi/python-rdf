@@ -1,3 +1,9 @@
+## v0.1.2 (2024-10-15)
+
+### Fix
+
+- **residentialhistoryadapter**: removed partner references
+
 ## v0.1.1 (2024-10-15)
 
 ### Fix
