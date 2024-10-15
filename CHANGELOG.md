@@ -1,3 +1,9 @@
+## v0.1.3 (2024-10-15)
+
+### Fix
+
+- **models**: lowercased output fields
+
 ## v0.1.2 (2024-10-15)
 
 ### Fix
