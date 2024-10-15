@@ -10,8 +10,8 @@ usage:
 	@echo
 	@echo "  help        Run rdf-tools help"
 	@echo "  version     Run rdf-tools version"
-	@echo "  statuses    Run rdf-tools statuses"
-	@echo "  swims       Run rdf-tools swims"
+	@echo "  courses     Run rdf-tools courses"
+	@echo "  residences  Run rdf-tools residences"
 	@echo
 
 .PHONY: clean
@@ -44,18 +44,18 @@ help: lint
 version: lint
 	@uv run --quiet rdf-tools --version
 
-.PHONY: statuses
-statuses: lint
-	@uv run --quiet rdf-tools statuses
+.PHONY: courses
+courses: lint
+	@uv run --quiet rdf-tools courses
 
-.PHONY: statuses.json
-statuses.json: lint
-	@uv run --quiet rdf-tools statuses --json | jq > $@
+.PHONY: courses.json
+courses.json: lint
+	@uv run --quiet rdf-tools courses --json | jq > $@
 
-.PHONY: swims
-swims: lint
-	@uv run --quiet rdf-tools swims
+.PHONY: residences
+residences: lint
+	@uv run --quiet rdf-tools residences
 
-.PHONY: swims.json
-swims.json: lint
-	@uv run --quiet rdf-tools swims --json | jq > $@
+.PHONY: residences.json
+residences.json: lint
+	@uv run --quiet rdf-tools residences --json | jq > $@

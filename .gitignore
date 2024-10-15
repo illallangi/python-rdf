@@ -11,3 +11,7 @@ wheels/
 
 # Configuration
 .env
+
+# JSON outpus
+courses.json
+residences.json
