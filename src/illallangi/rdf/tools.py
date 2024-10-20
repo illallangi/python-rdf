@@ -11,18 +11,18 @@ load_dotenv(
     override=True,
 )
 
-github_repo_owner_option = click.option(
-    "--github-repo-owner",
+airline_iata_argument = click.argument(
+    "airline_iata",
+    nargs=-1,
     required=True,
-    help="The owner of the repository.",
-    envvar="RDF_GITHUB_REPO_OWNER",
+    type=click.STRING,
 )
 
-github_repo_name_option = click.option(
-    "--github-repo-name",
+airport_iata_argument = click.argument(
+    "airport_iata",
+    nargs=-1,
     required=True,
-    help="The name of the repository.",
-    envvar="RDF_GITHUB_REPO_NAME",
+    type=click.STRING,
 )
 
 github_file_path_option = click.option(
@@ -32,6 +32,20 @@ github_file_path_option = click.option(
     envvar="RDF_GITHUB_FILE_PATH",
 )
 
+github_repo_name_option = click.option(
+    "--github-repo-name",
+    required=True,
+    help="The name of the repository.",
+    envvar="RDF_GITHUB_REPO_NAME",
+)
+
+github_repo_owner_option = click.option(
+    "--github-repo-owner",
+    required=True,
+    help="The owner of the repository.",
+    envvar="RDF_GITHUB_REPO_OWNER",
+)
+
 github_token_option = click.option(
     "--github-token",
     required=True,
@@ -39,33 +53,26 @@ github_token_option = click.option(
     envvar="RDF_GITHUB_TOKEN",
 )
 
-rdf_root = click.option(
-    "--rdf-root",
-    required=True,
-    help="The root URL of the RDF object.",
-    envvar="RDF_ROOT",
-)
-
-json_option = click.option(
+json_output_format_option = click.option(
     "--json",
     "output_format",
     flag_value="json",
     help="Output as JSON.",
 )
 
-output_format_option = click.option(
+rdf_root_option = click.option(
+    "--rdf-root",
+    required=True,
+    help="The root URL of the RDF object.",
+    envvar="RDF_ROOT",
+)
+
+table_output_format_option = click.option(
     "--table",
     "output_format",
     flag_value="table",
     default=True,
     help="Output as a table (default).",
-)
-
-iata_option = click.argument(
-    "iata",
-    nargs=-1,
-    required=True,
-    type=click.STRING,
 )
 
 version_option = click.version_option(
@@ -80,7 +87,6 @@ version_option = click.version_option(
 @github_repo_name_option
 @github_repo_owner_option
 @github_token_option
-@rdf_root
 @version_option
 def cli(
     ctx: click.Context,
@@ -95,82 +101,76 @@ def cli(
 
 @cli.command()
 @click.pass_context
-@iata_option
-@json_option
-@output_format_option
+@airline_iata_argument
+@json_output_format_option
+@table_output_format_option
 def airlines(
     ctx: click.Context,
-    output_format: str,
     *args: list,
     **kwargs: dict,
 ) -> None:
     output(
         *args,
         fn=ctx.obj.get_airlines,
-        output_format=output_format,
         **kwargs,
     )
 
 
 @cli.command()
 @click.pass_context
-@iata_option
-@json_option
-@output_format_option
+@airport_iata_argument
+@json_output_format_option
+@table_output_format_option
 def airports(
     ctx: click.Context,
-    output_format: str,
     *args: list,
     **kwargs: dict,
 ) -> None:
     output(
         *args,
         fn=ctx.obj.get_airports,
-        output_format=output_format,
         **kwargs,
     )
 
 
 @cli.command()
 @click.pass_context
-@json_option
-@output_format_option
+@json_output_format_option
+@rdf_root_option
+@table_output_format_option
 def courses(
     ctx: click.Context,
-    output_format: str,
     *args: list,
     **kwargs: dict,
 ) -> None:
     output(
         *args,
         fn=ctx.obj.get_courses,
-        output_format=output_format,
         **kwargs,
     )
 
 
 @cli.command()
 @click.pass_context
-@json_option
-@output_format_option
+@json_output_format_option
+@rdf_root_option
+@table_output_format_option
 def residences(
     ctx: click.Context,
-    output_format: str,
     *args: list,
     **kwargs: dict,
 ) -> None:
     output(
         *args,
         fn=ctx.obj.get_residences,
-        output_format=output_format,
         **kwargs,
     )
 
 
 def output(
+    *args: list,
     fn: callable,
     output_format: str,
-    *args: list,
     **kwargs: dict,
 ) -> None:
     objs = fn(
@@ -205,10 +205,14 @@ def output(
     if output_format == "table":
         click.echo(
             tabulate.tabulate(
-                objs,
+                [
+                    {k: v for k, v in obj.items() if not k.startswith("@")}
+                    for obj in objs
+                ],
                 headers="keys",
-                tablefmt="pretty",
-                colalign=["left" for _ in objs[0]],
+                tablefmt="presto",
+                numalign="left",
+                stralign="left",
             )
         )
         return
