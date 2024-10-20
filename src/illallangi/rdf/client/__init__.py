@@ -19,13 +19,11 @@ class RDFClient(
         github_repo_name: str,
         github_repo_owner: str,
         github_token: str,
-        rdf_root: str,
     ) -> None:
         self.github_file_path = github_file_path
         self.github_repo_name = github_repo_name
         self.github_repo_owner = github_repo_owner
         self.github_token = github_token
-        self.rdf_root = rdf_root
 
     @property
     def graph(self) -> rdflib.Graph:

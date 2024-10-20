@@ -7,6 +7,17 @@ from illallangi.rdf.models import Airline, Airport
 
 
 class AviationAdapter(diffsync.Adapter):
+    def __init__(
+        self,
+        *args: list,
+        **kwargs: dict,
+    ) -> None:
+        super().__init__()
+        self.client = RDFClient(
+            *args,
+            **kwargs,
+        )
+
     Airline = Airline
     Airport = Airport
 
@@ -19,25 +30,25 @@ class AviationAdapter(diffsync.Adapter):
 
     def load(
         self,
-        airline_iata: list[str] | None = None,
-        airport_iata: list[str] | None = None,
+        *args: list,
+        **kwargs: dict,
     ) -> None:
-        airline_iata = airline_iata or []
-        airport_iata = airport_iata or []
-
         for obj in self.client.get_airlines(
-            airline_iata,
+            *args,
+            **kwargs,
         ):
             self.add(
                 Airline(
                     iata=obj["iata"],
                     label=obj["label"],
                     icao=obj["icao"],
+                    alliance=obj["alliance"],
                 ),
             )
 
         for obj in self.client.get_airports(
-            airport_iata,
+            *args,
+            **kwargs,
         ):
             self.add(
                 Airport(
@@ -46,14 +57,3 @@ class AviationAdapter(diffsync.Adapter):
                     icao=obj["icao"],
                 ),
             )
-
-    def __init__(
-        self,
-        *args: list,
-        **kwargs: dict,
-    ) -> None:
-        super().__init__()
-        self.client = RDFClient(
-            *args,
-            **kwargs,
-        )

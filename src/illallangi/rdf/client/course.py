@@ -1,14 +1,14 @@
-import rdflib
 from partial_date import PartialDate
 
 
 class CourseMixin:
     def get_courses_query(
         self,
+        rdf_root: str,
     ) -> str:
         return f"""
 SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code ?country ?olc WHERE {{
-    <{ self.rdf_root }> ip:attendedCourse ?attended_course .
+    <{ rdf_root }> ip:attendedCourse ?attended_course .
     OPTIONAL {{ ?attended_course ip:startTime ?start }} .
     OPTIONAL {{ ?attended_course ip:endTime ?finish }} .
     ?attended_course rdfs:label ?label .
@@ -31,7 +31,7 @@ SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code
         self,
         *args: list,
         **kwargs: dict,
-    ) -> rdflib.Graph:
+    ) -> list[dict]:
         result = self.graph.query(
             self.get_courses_query(
                 *args,

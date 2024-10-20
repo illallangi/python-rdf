@@ -1,10 +1,10 @@
-import rdflib
 from partial_date import PartialDate
 
 
 class ResidenceMixin:
     def get_residences_query(
         self,
+        rdf_root: str,
     ) -> str:
         return f"""
 PREFIX i: <http://data.coley.au/rdf/entity#>
@@ -14,7 +14,7 @@ PREFIX v: <http://www.w3.org/2006/vcard/ns#>
 
 
 SELECT ?start ?finish ?label ?street ?locality ?region ?postal_code ?country ?olc WHERE {{
-    <{ self.rdf_root }> ip:residedAt ?residedAt .
+    <{ rdf_root }> ip:residedAt ?residedAt .
     OPTIONAL {{ ?residedAt ip:startTime ?start }} .
     OPTIONAL {{ ?residedAt ip:endTime ?finish }} .
     ?residedAt ip:atResidence ?atResidence .
@@ -36,7 +36,7 @@ SELECT ?start ?finish ?label ?street ?locality ?region ?postal_code ?country ?ol
         self,
         *args: list,
         **kwargs: dict,
-    ) -> rdflib.Graph:
+    ) -> list[dict]:
         result = self.graph.query(
             self.get_residences_query(
                 *args,

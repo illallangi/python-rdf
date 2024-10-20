@@ -1,14 +1,11 @@
-import rdflib
-
-
 class AirportMixin:
     def get_airports_query(
         self,
-        iata: list[str] | None = None,
+        airport_iata: list[str],
     ) -> str:
         return f"""
 SELECT ?label ?iata ?icao WHERE {{
-    VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in iata])}" ) }}
+    VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in airport_iata])}" ) }}
     ?href ip:airportIataCode ?value.
     ?href rdfs:label ?label .
     ?href ip:airportIataCode ?iata .
@@ -19,13 +16,16 @@ SELECT ?label ?iata ?icao WHERE {{
 
     def get_airports(
         self,
-        *args: list,
-        **kwargs: dict,
-    ) -> rdflib.Graph:
+        *_args: list,
+        airport_iata: list[str] | None = None,
+        **_kwargs: dict,
+    ) -> list[dict]:
+        if airport_iata is None:
+            return []
+
         result = self.graph.query(
             self.get_airports_query(
-                *args,
-                **kwargs,
+                airport_iata=airport_iata,
             ),
         )
 

@@ -4,28 +4,31 @@ import rdflib
 class AirlineMixin:
     def get_airlines_query(
         self,
-        iata: list[str] | None = None,
+        airline_iata: list[str],
     ) -> str:
         return f"""
-SELECT ?label ?iata ?icao WHERE {{
-    VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in iata])}" ) }}
-    ?href ip:airlineIataCode ?value.
-    ?href rdfs:label ?label .
-    ?href ip:airlineIataCode ?iata .
-    ?href ip:airlineIcaoCode ?icao .
-    ?href a ic:airline .
-}}
-"""
+    SELECT ?label ?iata ?icao WHERE {{
+        VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in airline_iata])}" ) }}
+        ?href ip:airlineIataCode ?value.
+        ?href rdfs:label ?label .
+        ?href ip:airlineIataCode ?iata .
+        OPTIONAL {{ ?href ip:airlineIcaoCode ?icao . }}
+        ?href a ic:airline .
+    }}
+    """
 
     def get_airlines(
         self,
-        *args: list,
-        **kwargs: dict,
-    ) -> rdflib.Graph:
+        *_args: list,
+        airline_iata: list[str] | None = None,
+        **_kwargs: dict,
+    ) -> list[dict]:
+        if airline_iata is None:
+            return []
+
         result = self.graph.query(
             self.get_airlines_query(
-                *args,
-                **kwargs,
+                airline_iata=airline_iata,
             ),
         )
 
