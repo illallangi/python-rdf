@@ -4,8 +4,8 @@ import tabulate
 from dotenv import load_dotenv
 from partial_date import PartialDate
 
-from .__version__ import __version__
-from .client import RDFClient
+from illallangi.rdf.__version__ import __version__
+from illallangi.rdf.client import RDFClient
 
 load_dotenv(
     override=True,

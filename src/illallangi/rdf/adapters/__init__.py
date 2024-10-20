@@ -1,6 +1,6 @@
-from .aviation import AviationAdapter
-from .education import EducationAdapter
-from .residential import ResidentialAdapter
+from illallangi.rdf.adapters.aviation import AviationAdapter
+from illallangi.rdf.adapters.education import EducationAdapter
+from illallangi.rdf.adapters.residential import ResidentialAdapter
 
 __all__ = [
     "AviationAdapter",
