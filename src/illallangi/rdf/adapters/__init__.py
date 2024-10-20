@@ -1,7 +1,6 @@
-from .aviation import AviationAdapter
-from .residential_history import ResidentialHistoryAdapter
+from .residential import ResidentialAdapter
 
 __all__ = [
     "AviationAdapter",
-    "ResidentialHistoryAdapter",
+    "ResidentialAdapter",
 ]
