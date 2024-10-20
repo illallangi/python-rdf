@@ -1,3 +1,16 @@
+## v0.2.0 (2024-10-20)
+
+### Feat
+
+- **airline**: added alliance
+- **EducationAdapter**: added
+
+### Refactor
+
+- **all**: moved environment variable configuration out of client
+- **ResidentialAdapter**: renamed from ResidentialHistoryAdapter
+- **rdf-tools**: refactored output
+
 ## v0.1.4 (2024-10-15)
 
 ### Fix
