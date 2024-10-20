@@ -5,13 +5,15 @@ class Airline(diffsync.DiffSyncModel):
     iata: str
 
     label: str
-    icao: str
+    icao: str | None
+    alliance: str | None
 
     _modelname = "Airline"
     _identifiers = ("iata",)
     _attributes = (
         "label",
         "icao",
+        "alliance",
     )
 
     @classmethod

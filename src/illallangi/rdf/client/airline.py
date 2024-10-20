@@ -1,4 +1,11 @@
-import rdflib
+class AirlinesNotFoundError(Exception):
+    def __init__(
+        self,
+        airline_iata: list[str],
+    ) -> None:
+        self.airline_iata = airline_iata
+        msg = f"Airline(s) not found: {', '.join(airline_iata)}"
+        super().__init__(msg)
 
 
 class AirlineMixin:
@@ -7,12 +14,16 @@ class AirlineMixin:
         airline_iata: list[str],
     ) -> str:
         return f"""
-    SELECT ?label ?iata ?icao WHERE {{
+    SELECT ?label ?iata ?icao ?alliance WHERE {{
         VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in airline_iata])}" ) }}
         ?href ip:airlineIataCode ?value.
         ?href rdfs:label ?label .
         ?href ip:airlineIataCode ?iata .
         OPTIONAL {{ ?href ip:airlineIcaoCode ?icao . }}
+        OPTIONAL {{
+            ?href ip:memberOfAirlineAlliance ?allianceHref .
+            ?allianceHref rdfs:label ?alliance .
+        }}
         ?href a ic:airline .
     }}
     """
@@ -32,7 +43,13 @@ class AirlineMixin:
             ),
         )
 
-        return [
+        result = [
             {str(k): str(b[str(k)]) if str(k) in b else None for k in result.vars}
             for b in result.bindings
         ]
+
+        not_found = [i for i in airline_iata if i not in [j["iata"] for j in result]]
+        if not_found:
+            raise AirlinesNotFoundError(not_found)
+
+        return result
