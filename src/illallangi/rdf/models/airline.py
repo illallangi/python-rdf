@@ -7,6 +7,7 @@ class Airline(diffsync.DiffSyncModel):
     label: str
     icao: str | None
     alliance: str | None
+    dominant_color: str | None
 
     _modelname = "Airline"
     _identifiers = ("iata",)
@@ -14,6 +15,7 @@ class Airline(diffsync.DiffSyncModel):
         "label",
         "icao",
         "alliance",
+        "dominant_color",
     )
 
     @classmethod

@@ -43,6 +43,7 @@ class AviationAdapter(diffsync.Adapter):
                     label=obj["label"],
                     icao=obj["icao"],
                     alliance=obj["alliance"],
+                    dominant_color=obj["dominant_color"],
                 ),
             )
 

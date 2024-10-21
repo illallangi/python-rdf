@@ -14,7 +14,7 @@ class AirlineMixin:
         airline_iata: list[str],
     ) -> str:
         return f"""
-    SELECT ?label ?iata ?icao ?alliance WHERE {{
+    SELECT ?label ?iata ?icao ?alliance ?dominant_color WHERE {{
         VALUES (?value) {{ ( "{'" ) ( "'.join(airline_iata)}" ) }}
         ?href ip:airlineIataCode ?value.
         ?href rdfs:label ?label .
@@ -24,6 +24,7 @@ class AirlineMixin:
             ?href ip:memberOfAirlineAlliance ?allianceHref .
             ?allianceHref rdfs:label ?alliance .
         }}
+        OPTIONAL {{ ?href ip:dominantColor ?dominant_color . }}
         ?href a ic:airline .
     }}
     """
