@@ -15,7 +15,7 @@ class AirlineMixin:
     ) -> str:
         return f"""
     SELECT ?label ?iata ?icao ?alliance WHERE {{
-        VALUES (?value) {{ ( "{'" ) ( "'.join([i.upper() for i in airline_iata])}" ) }}
+        VALUES (?value) {{ ( "{'" ) ( "'.join(airline_iata)}" ) }}
         ?href ip:airlineIataCode ?value.
         ?href rdfs:label ?label .
         ?href ip:airlineIataCode ?iata .
@@ -36,6 +36,7 @@ class AirlineMixin:
     ) -> list[dict]:
         if airline_iata is None:
             return []
+        airline_iata = [i.upper() for i in airline_iata]
 
         result = self.graph.query(
             self.get_airlines_query(
