@@ -1,3 +1,13 @@
+## v0.3.0 (2024-10-21)
+
+### Feat
+
+- **airline**: added dominant_color attribute
+
+### Fix
+
+- **AirlineClient**: uppercase IATAs consistently
+
 ## v0.2.0 (2024-10-20)
 
 ### Feat
