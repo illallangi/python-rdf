@@ -1,35 +1,31 @@
-import diffsync
+from attrs import define, field, validators
 
 
-class Airport(diffsync.DiffSyncModel):
-    iata: str
+@define(kw_only=True)
+class AirportKey:
+    # Natural Keys
 
-    label: str
-    icao: str
-
-    _modelname = "Airport"
-    _identifiers = ("iata",)
-    _attributes = (
-        "label",
-        "icao",
+    iata: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[A-Z]{3}$"),
+        ],
     )
 
-    @classmethod
-    def create(
-        cls,
-        adapter: diffsync.Adapter,
-        ids: dict,
-        attrs: dict,
-    ) -> "Airport":
-        raise NotImplementedError
 
-    def update(
-        self,
-        attrs: dict,
-    ) -> "Airport":
-        raise NotImplementedError
+@define(kw_only=True)
+class Airport(AirportKey):
+    # Fields
 
-    def delete(
-        self,
-    ) -> "Airport":
-        raise NotImplementedError
+    icao: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[A-Z]{4}$"),
+        ],
+    )
+
+    label: str = field(
+        validator=[
+            validators.instance_of(str),
+        ],
+    )

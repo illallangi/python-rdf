@@ -1,39 +1,47 @@
-import diffsync
+from attrs import define, field, validators
+
+from illallangi.rdf.models.alliance import Alliance
 
 
-class Airline(diffsync.DiffSyncModel):
-    iata: str
+@define(kw_only=True)
+class AirlineKey:
+    # Natural Keys
 
-    label: str
-    icao: str | None
-    alliance: str | None
-    dominant_color: str | None
-
-    _modelname = "Airline"
-    _identifiers = ("iata",)
-    _attributes = (
-        "label",
-        "icao",
-        "alliance",
-        "dominant_color",
+    iata: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[0-9A-Z]{2}$"),
+        ],
     )
 
-    @classmethod
-    def create(
-        cls,
-        adapter: diffsync.Adapter,
-        ids: dict,
-        attrs: dict,
-    ) -> "Airline":
-        raise NotImplementedError
 
-    def update(
-        self,
-        attrs: dict,
-    ) -> "Airline":
-        raise NotImplementedError
+@define(kw_only=True)
+class Airline(AirlineKey):
+    # Fields
 
-    def delete(
-        self,
-    ) -> "Airline":
-        raise NotImplementedError
+    alliance: Alliance | None = field(
+        validator=[
+            validators.instance_of(Alliance | None),
+        ],
+    )
+
+    dominant_color: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^#[0-9a-f]{6}$"),
+        ],
+    )
+
+    icao: str | None = field(
+        default=None,
+        validator=[
+            validators.instance_of(str | None),
+            # validators.matches_re(r"^[0-9A-Z]{3}$"),
+        ],
+    )
+
+    label: str = field(
+        validator=[
+            validators.instance_of(str),
+        ],
+    )

@@ -1,6 +1,9 @@
+from typing import Any
+
 import click
 import orjson
 import tabulate
+from cattrs import unstructure
 from dotenv import load_dotenv
 from partial_date import PartialDate
 
@@ -168,8 +171,8 @@ def residences(
 
 
 def output(
-    *args: list,
     fn: callable,
+    *args: list,
     output_format: str,
     **kwargs: dict,
 ) -> None:
@@ -182,33 +185,33 @@ def output(
         return
 
     # JSON output
-    if output_format == "json":
+    if output_format in [
+        "json",
+    ]:
+
+        def default(
+            obj: Any,  # noqa: ANN401
+        ) -> str:
+            if isinstance(obj, PartialDate):
+                return str(obj)
+            raise TypeError
+
         click.echo(
             orjson.dumps(
-                [
-                    {
-                        **obj,
-                        **{
-                            k: str(v)
-                            for k, v in obj.items()
-                            if isinstance(v, PartialDate)
-                        },
-                    }
-                    for obj in objs
-                ],
+                [{k: v for k, v in unstructure(obj).items() if v} for obj in objs],
                 option=orjson.OPT_SORT_KEYS,
+                default=default,
             ),
         )
         return
 
     # Table output
-    if output_format == "table":
+    if output_format in [
+        "table",
+    ]:
         click.echo(
             tabulate.tabulate(
-                [
-                    {k: v for k, v in obj.items() if not k.startswith("@")}
-                    for obj in objs
-                ],
+                [{k: v for k, v in unstructure(obj).items() if v} for obj in objs],
                 headers="keys",
                 tablefmt="presto",
                 numalign="left",

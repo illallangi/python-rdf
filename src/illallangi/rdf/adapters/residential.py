@@ -1,9 +1,20 @@
 from typing import ClassVar
 
 import diffsync
+from cattrs import global_converter, structure, unstructure
 
 from illallangi.rdf import RDFClient
-from illallangi.rdf.models import Residence
+from illallangi.rdf.diffsyncmodels import Residence
+
+
+@global_converter.register_structure_hook
+def trip_structure_hook(
+    value: dict,
+    type: type,  # noqa: A002, ARG001
+) -> Residence:
+    return Residence(
+        **value,
+    )
 
 
 class ResidentialAdapter(diffsync.Adapter):
@@ -35,16 +46,13 @@ class ResidentialAdapter(diffsync.Adapter):
             *args,
             **kwargs,
         ):
+            d = unstructure(
+                obj,
+            )
+            o = structure(
+                d,
+                Residence,
+            )
             self.add(
-                Residence(
-                    country=obj["country"],
-                    finish=obj["finish"],
-                    label=obj["label"],
-                    locality=obj["locality"],
-                    olc=obj["olc"],
-                    postal_code=obj["postal_code"],
-                    region=obj["region"],
-                    start=obj["start"],
-                    street=obj["street"],
-                ),
+                o,
             )

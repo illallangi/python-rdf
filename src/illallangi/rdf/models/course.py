@@ -1,50 +1,86 @@
-import diffsync
+from attrs import define, field, validators
 from partial_date import PartialDate
 
+from illallangi.rdf.converters.partial_date import to_partial_date
 
-class Course(diffsync.DiffSyncModel):
-    label: str
 
-    country: str
-    finish: PartialDate | None
-    institution: str
-    locality: str
-    olc: str
-    postal_code: str
-    region: str
-    start: PartialDate | None
-    street: str
+@define(kw_only=True)
+class CourseKey:
+    # Natural Keys
 
-    _modelname = "Course"
-    _identifiers = ("label",)
-    _attributes = (
-        "country",
-        "finish",
-        "institution",
-        "locality",
-        "olc",
-        "postal_code",
-        "region",
-        "start",
-        "street",
+    label: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
     )
 
-    @classmethod
-    def create(
-        cls,
-        adapter: diffsync.Adapter,
-        ids: dict,
-        attrs: dict,
-    ) -> "Course":
-        raise NotImplementedError
 
-    def update(
-        self,
-        attrs: dict,
-    ) -> "Course":
-        raise NotImplementedError
+@define(kw_only=True)
+class Course(CourseKey):
+    country: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
+    )
 
-    def delete(
-        self,
-    ) -> "Course":
-        raise NotImplementedError
+    finish: PartialDate | None = field(
+        converter=to_partial_date,
+        default="",
+        validator=[
+            validators.instance_of(PartialDate | None),
+        ],
+    )
+
+    institution: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
+    )
+
+    locality: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
+    )
+
+    open_location_code: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(
+                r"^[23456789CFGHJMPQRVWX]{8}\+[23456789CFGHJMPQRVWX]{2,}$"
+            ),
+        ],
+    )
+
+    postal_code: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^\d{4}$"),
+        ],
+    )
+
+    region: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
+    )
+
+    start: PartialDate | None = field(
+        converter=to_partial_date,
+        default="",
+        validator=[
+            validators.instance_of(PartialDate | None),
+        ],
+    )
+
+    street: str = field(
+        validator=[
+            validators.instance_of(str),
+            validators.matches_re(r"^[\w ]{1,63}$"),
+        ],
+    )

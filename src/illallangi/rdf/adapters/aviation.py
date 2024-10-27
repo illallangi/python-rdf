@@ -1,9 +1,31 @@
 from typing import ClassVar
 
 import diffsync
+from cattrs import global_converter, structure, unstructure
 
 from illallangi.rdf import RDFClient
-from illallangi.rdf.models import Airline, Airport
+from illallangi.rdf.diffsyncmodels import Airline, Airport
+
+
+@global_converter.register_structure_hook
+def airline_structure_hook(
+    value: dict,
+    type: type,  # noqa: A002, ARG001
+) -> Airline:
+    return Airline(
+        alliance__name=value["alliance"]["name"] if "alliance" in value and value["alliance"] is not None else None,
+        **value,
+    )
+
+
+@global_converter.register_structure_hook
+def airport_structure_hook(
+    value: dict,
+    type: type,  # noqa: A002, ARG001
+) -> Airport:
+    return Airport(
+        **value,
+    )
 
 
 class AviationAdapter(diffsync.Adapter):
@@ -37,24 +59,28 @@ class AviationAdapter(diffsync.Adapter):
             *args,
             **kwargs,
         ):
+            d = unstructure(
+                obj,
+            )
+            o = structure(
+                d,
+                Airline,
+            )
             self.add(
-                Airline(
-                    iata=obj["iata"],
-                    label=obj["label"],
-                    icao=obj["icao"],
-                    alliance=obj["alliance"],
-                    dominant_color=obj["dominant_color"],
-                ),
+                o,
             )
 
         for obj in self.client.get_airports(
             *args,
             **kwargs,
         ):
+            d = unstructure(
+                obj,
+            )
+            o = structure(
+                d,
+                Airport,
+            )
             self.add(
-                Airport(
-                    iata=obj["iata"],
-                    label=obj["label"],
-                    icao=obj["icao"],
-                ),
+                o,
             )

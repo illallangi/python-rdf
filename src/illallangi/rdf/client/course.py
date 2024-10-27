@@ -1,13 +1,18 @@
-from partial_date import PartialDate
+from collections.abc import Generator
+from typing import Any
+
+from illallangi.rdf.models import Course
 
 
 class CourseMixin:
-    def get_courses_query(
+    def get_courses(
         self,
+        *_args: list[Any],
         rdf_root: str,
-    ) -> str:
-        return f"""
-SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code ?country ?olc WHERE {{
+        **_kwargs: dict[str, Any],
+    ) -> Generator[Course, Any, list | None]:
+        query = f"""
+SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code ?country ?open_location_code WHERE {{
     <{ rdf_root }> ip:attendedCourse ?attended_course .
     OPTIONAL {{ ?attended_course ip:startTime ?start }} .
     OPTIONAL {{ ?attended_course ip:endTime ?finish }} .
@@ -23,37 +28,13 @@ SELECT ?start ?finish ?label ?institution ?street ?locality ?region ?postal_code
         OPTIONAL {{ ?address v:postal-code ?postal_code }}
         OPTIONAL {{ ?address v:country-name ?country }}
     }}
-    OPTIONAL {{ ?at_institution ip:olc ?olc }} .
+    OPTIONAL {{ ?at_institution ip:olc ?open_location_code }} .
 }}
 """
 
-    def get_courses(
-        self,
-        *args: list,
-        **kwargs: dict,
-    ) -> list[dict]:
-        result = self.graph.query(
-            self.get_courses_query(
-                *args,
-                **kwargs,
-            ),
-        )
-
-        return sorted(
-            [
-                {
-                    **{
-                        str(k): b[str(k)].value if str(k) in b else None
-                        for k in result.vars
-                    },
-                    "start": PartialDate(b["start"].value)
-                    if "start" in b and b["start"].value not in ["Unknown"]
-                    else None,
-                    "finish": PartialDate(b["finish"].value)
-                    if "finish" in b and b["finish"].value not in ["Unknown"]
-                    else None,
-                }
-                for b in result.bindings
-            ],
-            key=lambda x: str(x["start"]),
-        )
+        for course in self.query(
+            query=query,
+        ):
+            yield Course(
+                **course,
+            )

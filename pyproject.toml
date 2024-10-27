@@ -10,6 +10,8 @@ description = "A collection of command line tools to interact with RDF."
 readme = "README.md"
 requires-python = ">=3.10.1"
 dependencies = [
+    "attrs>=24.2.0",
+    "cattrs>=24.1.2",
     "click>=8.1.7",
     "diffsync>=2.0.0",
     "django-partial-date>=1.3.2",

@@ -1,3 +1,6 @@
+from collections.abc import Generator
+from typing import Any
+
 import rdflib
 import requests
 
@@ -42,3 +45,21 @@ class RDFClient(
         response.raise_for_status()
 
         return rdflib.Graph().parse(data=response.content)
+
+    def query(
+        self,
+        query: str,
+    ) -> Generator[dict[str, str | None], Any, None]:
+        results = self.graph.query(
+            query,
+        )
+
+        for result in results.bindings:
+            yield {
+                k: v
+                for k, v in {
+                    str(key): str(result[str(key)]) if str(key) in result else None
+                    for key in results.vars
+                }.items()
+                if v is not None and v not in ["", "None"]
+            }
