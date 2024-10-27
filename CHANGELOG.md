@@ -1,3 +1,9 @@
+## v0.4.0 (2024-10-27)
+
+### Feat
+
+- **all**: Implemented attrs and cattrs
+
 ## v0.3.0 (2024-10-21)
 
 ### Feat
