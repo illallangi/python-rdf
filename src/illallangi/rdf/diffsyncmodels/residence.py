@@ -2,18 +2,9 @@ import diffsync
 from partial_date import PartialDate
 
 
-class Residence(diffsync.DiffSyncModel):
-    label: str
-
-    country: str
-    finish: PartialDate | None
-    locality: str
-    open_location_code: str
-    postal_code: str
-    region: str
-    start: PartialDate | None
-    street: str
-
+class Residence(
+    diffsync.DiffSyncModel,
+):
     _modelname = "Residence"
     _identifiers = ("label",)
     _attributes = (
@@ -26,6 +17,17 @@ class Residence(diffsync.DiffSyncModel):
         "start",
         "street",
     )
+
+    label: str
+
+    country: str
+    finish: PartialDate | None
+    locality: str
+    open_location_code: str
+    postal_code: str
+    region: str
+    start: PartialDate | None
+    street: str
 
     @classmethod
     def create(

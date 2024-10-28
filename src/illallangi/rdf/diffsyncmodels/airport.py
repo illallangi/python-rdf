@@ -1,18 +1,20 @@
 import diffsync
 
 
-class Airport(diffsync.DiffSyncModel):
-    iata: str
-
-    label: str
-    icao: str
-
+class Airport(
+    diffsync.DiffSyncModel,
+):
     _modelname = "Airport"
     _identifiers = ("iata",)
     _attributes = (
         "icao",
         "label",
     )
+
+    iata: str
+
+    icao: str
+    label: str
 
     @classmethod
     def create(

@@ -1,14 +1,9 @@
 import diffsync
 
 
-class Airline(diffsync.DiffSyncModel):
-    iata: str
-
-    label: str
-    icao: str | None
-    alliance__name: str | None
-    dominant_color: str | None
-
+class Airline(
+    diffsync.DiffSyncModel,
+):
     _modelname = "Airline"
     _identifiers = ("iata",)
     _attributes = (
@@ -17,6 +12,13 @@ class Airline(diffsync.DiffSyncModel):
         "icao",
         "label",
     )
+
+    iata: str
+
+    alliance__name: str | None
+    dominant_color: str
+    icao: str | None
+    label: str
 
     @classmethod
     def create(

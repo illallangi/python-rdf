@@ -13,7 +13,9 @@ def airline_structure_hook(
     type: type,  # noqa: A002, ARG001
 ) -> Airline:
     return Airline(
-        alliance__name=value["alliance"]["name"] if "alliance" in value and value["alliance"] is not None else None,
+        alliance__name=value["alliance"]["name"]
+        if "alliance" in value and value["alliance"] is not None
+        else None,
         **value,
     )
 
