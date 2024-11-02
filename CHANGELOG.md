@@ -1,3 +1,15 @@
+## v0.5.0 (2024-11-02)
+
+### Feat
+
+- **aircraft**: added
+- **manufacturer**: added
+
+### Fix
+
+- **partialdate-converter**: added null handling
+- **client**: added caching of rdf file
+
 ## v0.4.0 (2024-10-27)
 
 ### Feat
