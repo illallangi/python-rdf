@@ -5,6 +5,7 @@ from typing import Any
 import rdflib
 import requests
 
+from illallangi.rdf.client.aircraft import AircraftMixin
 from illallangi.rdf.client.airline import AirlineMixin
 from illallangi.rdf.client.airport import AirportMixin
 from illallangi.rdf.client.course import CourseMixin
@@ -13,6 +14,7 @@ from illallangi.rdf.client.residence import ResidenceMixin
 
 
 class RDFClient(
+    AircraftMixin,
     AirlineMixin,
     AirportMixin,
     CourseMixin,

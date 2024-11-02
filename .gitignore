@@ -13,6 +13,7 @@ wheels/
 .env
 
 # JSON outputs
+aircraft.json
 airlines.json
 airports.json
 courses.json

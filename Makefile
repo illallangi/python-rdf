@@ -10,6 +10,7 @@ usage:
 	@echo
 	@echo "  help           Run rdf-tools help"
 	@echo "  version        Run rdf-tools version"
+	@echo "  aircraft       Run rdf-tools aircraft"
 	@echo "  airlines       Run rdf-tools airlines"
 	@echo "  airports       Run rdf-tools airports"
 	@echo "  courses        Run rdf-tools courses"
@@ -47,6 +48,14 @@ help: lint
 .PHONY: version
 version: lint
 	@uv run --quiet rdf-tools --version
+
+.PHONY: aircraft
+aircraft: lint
+	@uv run --quiet rdf-tools aircraft
+
+.PHONY: aircraft.json
+aircraft.json: lint
+	@uv run --quiet rdf-tools aircraft --json | jq > $@
 
 .PHONY: airlines
 airlines: lint

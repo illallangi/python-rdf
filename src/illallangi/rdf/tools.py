@@ -104,6 +104,22 @@ def cli(
 
 @cli.command()
 @click.pass_context
+@json_output_format_option
+@table_output_format_option
+def aircraft(
+    ctx: click.Context,
+    *args: list,
+    **kwargs: dict,
+) -> None:
+    output(
+        *args,
+        fn=ctx.obj.get_aircraft,
+        **kwargs,
+    )
+
+
+@cli.command()
+@click.pass_context
 @airline_iata_argument
 @json_output_format_option
 @table_output_format_option
