@@ -156,6 +156,22 @@ def courses(
 @cli.command()
 @click.pass_context
 @json_output_format_option
+@table_output_format_option
+def manufacturers(
+    ctx: click.Context,
+    *args: list,
+    **kwargs: dict,
+) -> None:
+    output(
+        *args,
+        fn=ctx.obj.get_manufacturers,
+        **kwargs,
+    )
+
+
+@cli.command()
+@click.pass_context
+@json_output_format_option
 @rdf_root_option
 @table_output_format_option
 def residences(

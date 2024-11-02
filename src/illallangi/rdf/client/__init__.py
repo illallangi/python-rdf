@@ -8,6 +8,7 @@ import requests
 from illallangi.rdf.client.airline import AirlineMixin
 from illallangi.rdf.client.airport import AirportMixin
 from illallangi.rdf.client.course import CourseMixin
+from illallangi.rdf.client.manufacturer import ManufacturerMixin
 from illallangi.rdf.client.residence import ResidenceMixin
 
 
@@ -15,6 +16,7 @@ class RDFClient(
     AirlineMixin,
     AirportMixin,
     CourseMixin,
+    ManufacturerMixin,
     ResidenceMixin,
 ):
     def __init__(
