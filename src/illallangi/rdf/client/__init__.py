@@ -1,4 +1,5 @@
 from collections.abc import Generator
+from functools import cached_property
 from typing import Any
 
 import rdflib
@@ -28,7 +29,7 @@ class RDFClient(
         self.github_repo_owner = github_repo_owner
         self.github_token = github_token
 
-    @property
+    @cached_property
     def graph(self) -> rdflib.Graph:
         url = f"https://api.github.com/repos/{self.github_repo_owner}/{self.github_repo_name}/contents/{self.github_file_path}"
         headers = {
