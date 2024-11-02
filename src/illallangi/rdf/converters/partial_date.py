@@ -4,6 +4,8 @@ from partial_date import PartialDate
 def to_partial_date(
     value: str | PartialDate,
 ) -> PartialDate:
+    if value is None:
+        return None
     if isinstance(value, PartialDate):
         return value
     if isinstance(value, str):
